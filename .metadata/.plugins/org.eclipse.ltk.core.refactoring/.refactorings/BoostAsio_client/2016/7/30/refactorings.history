@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;BoostAsioTcp/sdf.cpp&apos; to &apos;client.cpp&apos;" description="Rename resource &apos;sdf.cpp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="sdf.cpp" name="client.cpp" stamp="1469169286463" updateReferences="true"/>
+</session>

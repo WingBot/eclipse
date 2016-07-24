@@ -1,0 +1,12 @@
+14:41:15 **** Incremental Build of configuration Default for project hans_base ****
+eclipsemake all 
+cd /home/agv/AGV_ws/build && /usr/bin/cmake -H/home/agv/AGV_ws/src -B/home/agv/AGV_ws/build --check-build-system CMakeFiles/Makefile.cmake 0
+cd /home/agv/AGV_ws/build && /usr/bin/cmake -E cmake_progress_start /home/agv/AGV_ws/build/CMakeFiles /home/agv/AGV_ws/build/hans_base/CMakeFiles/progress.marks
+cd /home/agv/AGV_ws/build && make -f CMakeFiles/Makefile2 hans_base/all
+make[1]: Entering directory `/home/agv/AGV_ws/build'
+make[1]: Leaving directory `/home/agv/AGV_ws/build'
+make[1]: *** No rule to make target `hans_base/all'.  Stop.
+make: *** [all] Error 2
+
+14:41:17 Build Finished (took 2s.230ms)
+

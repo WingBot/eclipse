@@ -1,0 +1,15 @@
+09:18:50 **** Build of configuration Debug for project BoostAsio_client ****
+make all 
+Building file: ../BoostAsio_client.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"BoostAsio_client.d" -MT"BoostAsio_client.o" -o "BoostAsio_client.o" "../BoostAsio_client.cpp"
+Finished building: ../BoostAsio_client.cpp
+ 
+Building target: BoostAsio_client
+Invoking: Cross G++ Linker
+g++  -o "BoostAsio_client"  ./BoostAsio_client.o  /usr/local/lib/boost_1_16_0/libboost_atomic.a /usr/local/lib/boost_1_16_0/* 
+Finished building target: BoostAsio_client
+ 
+
+09:18:51 Build Finished (took 1s.640ms)
+

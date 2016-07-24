@@ -1,0 +1,28 @@
+/*
+ * ros_function.h
+ *
+ *  Created on: Jul 23, 2016
+ *      Author: agv
+ */
+
+#ifndef INCLUDE_ROS_FUNCTION_H_
+#define INCLUDE_ROS_FUNCTION_H_
+
+void CmdVelCall(const geometry_msgs::TwistConstPtr &Vel)
+{
+    ControlPackge DriveCmd;
+    //W左轮角速度　＝（V车/ R轮半径－（W车＊Ｂ车轮距）／（２＊Ｒ轮半径）　　rad/s　　(Vel->linear.x / WheelR - (WheelBase * Vel->angular.z)/(2*WheelR))
+    //W右轮角速度　＝（V车/ R轮半径＋（W车＊Ｂ车轮距）／（２＊Ｒ轮半径）　　rad/s
+    //N轮转速　＝　W轮角速度＊60 /(２*PI) 　　rad/s --> roll/min
+	int LeftWheelRPM = (int)((Vel->linear.x / WheelR - (WheelBase * Vel->angular.z)/(2*WheelR)) * 30 / PI);	//rad/s -> roll/min.10倍调试
+	int RightWheelRPM = (int)((Vel->linear.x / WheelR + (WheelBase * Vel->angular.z)/(2*WheelR)) * 30 / PI);
+	ROS_INFO(" send 10　times　LeftWheelRPM  = %d", LeftWheelRPM);
+	ROS_INFO(" send 10 times 　RightWheelRPM  = %d", RightWheelRPM);
+	AGVHardware::DriveCommand(LeftWheelRPM, RightWheelRPM, DriveCmd);           //RPM;
+	AgvClient.ClientSend(DriveCmd);
+
+}
+
+
+
+#endif /* INCLUDE_ROS_FUNCTION_H_ */

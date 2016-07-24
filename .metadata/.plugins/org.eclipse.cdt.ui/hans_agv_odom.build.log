@@ -1,0 +1,10 @@
+11:14:21 **** Clean-only build of configuration Default for project hans_agv_odom ****
+eclipsemake clean 
+cd /home/agv/AGV_ws/build && make -f CMakeFiles/Makefile2 hans_agv_odom/clean
+make[1]: Entering directory `/home/agv/AGV_ws/build'
+make[1]: *** No rule to make target `hans_agv_odom/clean'.  Stop.
+make: *** [clean] Error 2
+make[1]: Leaving directory `/home/agv/AGV_ws/build'
+
+11:14:22 Build Finished (took 234ms)
+

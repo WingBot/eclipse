@@ -1,0 +1,70 @@
+/*
+ * ComputeOdomTest.cpp
+ *
+ *  Created on: Jul 19, 2016
+ *      Author: szr@giimagv
+ */
+#include <iostream>
+#include <stdio.h>
+#include "hans_bringup/HansHardware.h"
+
+using namespace std;
+
+int main(int argc, char **argv)
+{
+	AGVSENSORS PreSensor, NewSensor;
+	PreSensor.MsgHeader=0;
+	PreSensor.MsgLength=0;
+	PreSensor.TimeStamp[2]="";//初始时刻
+	PreSensor.Bumper=0;
+	PreSensor.WheelMissed=0;
+	PreSensor.TouchGround=0;
+	PreSensor.WheelLeft_Encoder[4]="";
+	PreSensor.WheelRight_Encoder[4]="";
+	PreSensor.PWMLeft=0;
+	PreSensor.PWMRight=0;
+	PreSensor.HANButton=0;
+	PreSensor.HANCharger=0;
+	PreSensor.HANBattery=0;
+	PreSensor.CurrentBeyond=0;
+
+	NewSensor.MsgHeader=0;
+	NewSensor.MsgLength=0;
+	NewSensor.TimeStamp[0]=0x00;
+	NewSensor.TimeStamp[1]=0x0A;//最后时刻,假设时间间隔为dt 0x000A-0x0000=10s
+	NewSensor.Bumper=0;
+	NewSensor.WheelMissed=0;
+	NewSensor.TouchGround=0;
+	NewSensor.WheelLeft_Encoder[0]=0x84;
+	NewSensor.WheelLeft_Encoder[1]=0x03;
+	NewSensor.WheelLeft_Encoder[2]=0x00;
+	NewSensor.WheelLeft_Encoder[3]=0x00;//假设dt内脉冲总数900,对应十六进制数384
+	NewSensor.WheelRight_Encoder[0]=0x84;
+	NewSensor.WheelRight_Encoder[1]=0x03;
+	NewSensor.WheelRight_Encoder[2]=0x00;
+	NewSensor.WheelRight_Encoder[3]=0x00;//假设dt内脉冲总数900,对应十六进制数384
+	NewSensor.PWMLeft=0;
+	NewSensor.PWMRight=0;
+	NewSensor.HANButton=0;
+	NewSensor.HANCharger=0;
+	NewSensor.HANBattery=0;
+	NewSensor.CurrentBeyond=0;
+
+	OdomPackage Odom;
+	Odom.TimeStamp=0.0;
+	Odom.PassPath=0.0;
+	Odom.PassTheta=0.0;
+	Odom.Locat.X=0.0;
+	Odom.Locat.Y=0.0;
+	Odom.Locat.Theta=0.0;
+	Odom.Velo.Linear=0.0;
+	Odom.Velo.Angular=0.0;
+
+
+	AGVHardware::ComputeOdom(&NewSensor,10,Odom);
+
+
+}
+
+
+

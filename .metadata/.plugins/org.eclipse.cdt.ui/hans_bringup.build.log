@@ -1,0 +1,56 @@
+11:53:17 **** Incremental Build of configuration Default for project hans_bringup ****
+eclipsemake all 
+cd /home/agv/AGV_ws/build && /usr/bin/cmake -H/home/agv/AGV_ws/src -B/home/agv/AGV_ws/build --check-build-system CMakeFiles/Makefile.cmake 0
+cd /home/agv/AGV_ws/build && /usr/bin/cmake -E cmake_progress_start /home/agv/AGV_ws/build/CMakeFiles /home/agv/AGV_ws/build/hans_bringup/CMakeFiles/progress.marks
+cd /home/agv/AGV_ws/build && make -f CMakeFiles/Makefile2 hans_bringup/all
+make[1]: Entering directory `/home/agv/AGV_ws/build'
+make -f hans_bringup/CMakeFiles/AGVDriverlib.dir/build.make hans_bringup/CMakeFiles/AGVDriverlib.dir/depend
+make[2]: Entering directory `/home/agv/AGV_ws/build'
+cd /home/agv/AGV_ws/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/agv/AGV_ws/src /home/agv/AGV_ws/src/hans_bringup /home/agv/AGV_ws/build /home/agv/AGV_ws/build/hans_bringup /home/agv/AGV_ws/build/hans_bringup/CMakeFiles/AGVDriverlib.dir/DependInfo.cmake --color=
+make[2]: Leaving directory `/home/agv/AGV_ws/build'
+make -f hans_bringup/CMakeFiles/AGVDriverlib.dir/build.make hans_bringup/CMakeFiles/AGVDriverlib.dir/build
+make[2]: Entering directory `/home/agv/AGV_ws/build'
+make[2]: Nothing to be done for `hans_bringup/CMakeFiles/AGVDriverlib.dir/build'.
+make[2]: Leaving directory `/home/agv/AGV_ws/build'
+/usr/bin/cmake -E cmake_progress_report /home/agv/AGV_ws/build/CMakeFiles  1 2
+[ 50%] Built target AGVDriverlib
+make -f hans_bringup/CMakeFiles/hans_bringup_node.dir/build.make hans_bringup/CMakeFiles/hans_bringup_node.dir/depend
+make -f hans_bringup/CMakeFiles/hans_bringup_node2.dir/build.make hans_bringup/CMakeFiles/hans_bringup_node2.dir/depend
+make[2]: Entering directory `/home/agv/AGV_ws/build'
+cd /home/agv/AGV_ws/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/agv/AGV_ws/src /home/agv/AGV_ws/src/hans_bringup /home/agv/AGV_ws/build /home/agv/AGV_ws/build/hans_bringup /home/agv/AGV_ws/build/hans_bringup/CMakeFiles/hans_bringup_node.dir/DependInfo.cmake --color=
+make[2]: Entering directory `/home/agv/AGV_ws/build'
+cd /home/agv/AGV_ws/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/agv/AGV_ws/src /home/agv/AGV_ws/src/hans_bringup /home/agv/AGV_ws/build /home/agv/AGV_ws/build/hans_bringup /home/agv/AGV_ws/build/hans_bringup/CMakeFiles/hans_bringup_node2.dir/DependInfo.cmake --color=
+Dependee "/home/agv/AGV_ws/src/hans_bringup/src/TcpClientTestNode.cpp" is newer than depender "hans_bringup/CMakeFiles/hans_bringup_node.dir/src/TcpClientTestNode.cpp.o".
+Clearing dependencies in "/home/agv/AGV_ws/build/hans_bringup/CMakeFiles/hans_bringup_node.dir/depend.make".
+Scanning dependencies of target hans_bringup_node
+make[2]: Leaving directory `/home/agv/AGV_ws/build'
+make -f hans_bringup/CMakeFiles/hans_bringup_node.dir/build.make hans_bringup/CMakeFiles/hans_bringup_node.dir/build
+make[2]: Leaving directory `/home/agv/AGV_ws/build'
+make -f hans_bringup/CMakeFiles/hans_bringup_node2.dir/build.make hans_bringup/CMakeFiles/hans_bringup_node2.dir/build
+make[2]: Entering directory `/home/agv/AGV_ws/build'
+/usr/bin/cmake -E cmake_progress_report /home/agv/AGV_ws/build/CMakeFiles 5
+make[2]: Entering directory `/home/agv/AGV_ws/build'
+/usr/bin/cmake -E cmake_progress_report /home/agv/AGV_ws/build/CMakeFiles 6
+[ 75%] [100%] Building CXX object hans_bringup/CMakeFiles/hans_bringup_node.dir/src/TcpClientTestNode.cpp.o
+Building CXX object hans_bringup/CMakeFiles/hans_bringup_node2.dir/src/TcpClientTestNode2.cpp.o
+cd /home/agv/AGV_ws/build/hans_bringup && /usr/bin/c++   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\"hans_bringup\" -I/home/agv/AGV_ws/src/hans_bringup/include -I/opt/ros/indigo/include    -o CMakeFiles/hans_bringup_node2.dir/src/TcpClientTestNode2.cpp.o -c /home/agv/AGV_ws/src/hans_bringup/src/TcpClientTestNode2.cpp
+cd /home/agv/AGV_ws/build/hans_bringup && /usr/bin/c++   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\"hans_bringup\" -I/home/agv/AGV_ws/src/hans_bringup/include -I/opt/ros/indigo/include    -o CMakeFiles/hans_bringup_node.dir/src/TcpClientTestNode.cpp.o -c /home/agv/AGV_ws/src/hans_bringup/src/TcpClientTestNode.cpp
+/home/agv/AGV_ws/src/hans_bringup/src/TcpClientTestNode2.cpp: In function ‘int main(int, char**)’:
+/home/agv/AGV_ws/src/hans_bringup/src/TcpClientTestNode2.cpp:138:73: error: ‘CmdVelCall’ was not declared in this scope
+  ros::Subscriber VelSub = n.subscribe("/turtlebot_teleop/cmd_vel", 100, CmdVelCall);
+                                                                         ^
+make[2]: Leaving directory `/home/agv/AGV_ws/build'
+make[2]: *** [hans_bringup/CMakeFiles/hans_bringup_node2.dir/src/TcpClientTestNode2.cpp.o] Error 1
+make[1]: *** [hans_bringup/CMakeFiles/hans_bringup_node2.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+Linking CXX executable /home/agv/AGV_ws/devel/lib/hans_bringup/hans_bringup_node
+cd /home/agv/AGV_ws/build/hans_bringup && /usr/bin/cmake -E cmake_link_script CMakeFiles/hans_bringup_node.dir/link.txt --verbose=1
+/usr/bin/c++       CMakeFiles/hans_bringup_node.dir/src/TcpClientTestNode.cpp.o  -o /home/agv/AGV_ws/devel/lib/hans_bringup/hans_bringup_node -rdynamic /home/agv/AGV_ws/devel/lib/libAGVDriverlib.so /opt/ros/indigo/lib/libroscpp.so -lboost_signals -lboost_filesystem /opt/ros/indigo/lib/librosconsole.so /opt/ros/indigo/lib/librosconsole_log4cxx.so /opt/ros/indigo/lib/librosconsole_backend_interface.so -llog4cxx -lboost_regex /opt/ros/indigo/lib/libxmlrpcpp.so /opt/ros/indigo/lib/libroscpp_serialization.so /opt/ros/indigo/lib/librostime.so -lboost_date_time /opt/ros/indigo/lib/libcpp_common.so -lboost_system -lboost_thread -lpthread -lconsole_bridge -Wl,-rpath,/home/agv/AGV_ws/devel/lib:/opt/ros/indigo/lib 
+make[2]: Leaving directory `/home/agv/AGV_ws/build'
+/usr/bin/cmake -E cmake_progress_report /home/agv/AGV_ws/build/CMakeFiles  5
+[100%] Built target hans_bringup_node
+make[1]: Leaving directory `/home/agv/AGV_ws/build'
+make: *** [all] Error 2
+
+11:53:19 Build Finished (took 2s.48ms)
+

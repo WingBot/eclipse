@@ -1,0 +1,15 @@
+10:25:15 **** Incremental Build of configuration Debug for project TinuxTimer ****
+make all 
+Building file: ../src/TinuxTimer.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/TinuxTimer.d" -MT"src/TinuxTimer.o" -o "src/TinuxTimer.o" "../src/TinuxTimer.cpp"
+Finished building: ../src/TinuxTimer.cpp
+ 
+Building target: TinuxTimer
+Invoking: Cross G++ Linker
+g++  -o "TinuxTimer"  ./src/TinuxTimer.o   
+Finished building target: TinuxTimer
+ 
+
+10:25:16 Build Finished (took 134ms)
+

@@ -1,0 +1,16 @@
+/*
+ * AgvPara.h
+ *
+ *  Created on: Jul 18, 2016
+ *      Author: agv
+ */
+
+#ifndef INCLUDE_HANS_BRINGUP_AGVPARA_H_
+#define INCLUDE_HANS_BRINGUP_AGVPARA_H_
+
+const float robot_R = 0.0675;	//车轮半径
+const float robot_B = 0.589;	//轮距
+
+
+
+#endif /* INCLUDE_HANS_BRINGUP_AGVPARA_H_ */

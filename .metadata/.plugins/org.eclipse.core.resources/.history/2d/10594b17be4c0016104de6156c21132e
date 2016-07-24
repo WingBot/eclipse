@@ -1,0 +1,33 @@
+/*
+ * HansDriverNode.h
+ *
+ *  Created on: Jul 18, 2016
+ *      Author: agv
+ */
+
+#ifndef INCLUDE_HANS_BRINGUP_HANSDRIVERNODE_H_
+#define INCLUDE_HANS_BRINGUP_HANSDRIVERNODE_H_
+
+#include "hans_bringup/data_definition.h"
+#include "hans_bringup/AgvPara.h"
+
+//#include <ros/ros.h>
+#include <geometry_msgs/Twist.h>
+
+class AGVHareware {
+public:
+	double WheelSpdGetRadPS();
+	double WheelSpdGetRPM();
+
+private:
+};
+
+int Omega_L = (int)(vel->linear.x / robot_R - (robot_B * vel->angular.z)/(2*robot_R)) * 60;	//roll/s -> roll/min.
+	int Omega_R = (int)(vel->linear.x / robot_R + (robot_B * vel->angular.z)/(2*robot_R)) * 60;
+	  double HuskyHardware::linearToAngular(const double &travel) const
+	  {
+	    return travel / wheel_diameter_ * 2;
+	  }
+
+
+#endif /* INCLUDE_HANS_BRINGUP_HANSDRIVERNODE_H_ */

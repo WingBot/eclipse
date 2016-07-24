@@ -1,0 +1,6 @@
+10:08:02 **** Build of configuration Default for project rmp_base ****
+eclipsemake all 
+make: *** No rule to make target `all'.  Stop.
+
+10:08:02 Build Finished (took 197ms)
+

@@ -1,0 +1,12 @@
+10:08:47 **** Build of configuration Default for project node_example ****
+eclipsemake all 
+cd /home/agv/catkin_ws/build && /usr/bin/cmake -H/home/agv/catkin_ws/src -B/home/agv/catkin_ws/build --check-build-system CMakeFiles/Makefile.cmake 0
+cd /home/agv/catkin_ws/build && /usr/bin/cmake -E cmake_progress_start /home/agv/catkin_ws/build/CMakeFiles /home/agv/catkin_ws/build/node_example/CMakeFiles/progress.marks
+cd /home/agv/catkin_ws/build && make -f CMakeFiles/Makefile2 node_example/all
+make[1]: Entering directory `/home/agv/catkin_ws/build'
+make[1]: Leaving directory `/home/agv/catkin_ws/build'
+make[1]: *** No rule to make target `node_example/all'.  Stop.
+make: *** [all] Error 2
+
+10:08:48 Build Finished (took 349ms)
+

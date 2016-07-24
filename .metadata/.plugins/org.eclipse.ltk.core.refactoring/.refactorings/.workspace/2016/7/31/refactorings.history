@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;BoostAsioTcp&apos; to &apos;BoostAsioTcp_client&apos;" description="Rename resource &apos;BoostAsioTcp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/BoostAsioTcp" name="BoostAsioTcp_client" stamp="1469322942859" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;BoostAsioTcp_client&apos; to &apos;BoostAsio_client&apos;" description="Rename resource &apos;BoostAsioTcp_client&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/BoostAsioTcp_client" name="BoostAsio_client" stamp="1469322982080" updateReferences="true"/>
+</session>

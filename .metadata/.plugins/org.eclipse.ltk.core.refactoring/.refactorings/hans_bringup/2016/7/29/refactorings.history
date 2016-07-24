@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;hans_bringup/src/AGVSocketClient.cpp&apos; to &apos;SocketClient.cpp&apos;" description="Rename resource &apos;AGVSocketClient.cpp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/AGVSocketClient.cpp" name="SocketClient.cpp" stamp="1468547839873" updateReferences="true"/>
+</session>

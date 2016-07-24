@@ -1,0 +1,30 @@
+/*
+ * AGVOdom.h
+ *
+ *  Created on: Jul 18, 2016
+ *      Author: agv
+ */
+
+#ifndef INCLUDE_HANS_BRINGUP_AGVODOM_H_
+#define INCLUDE_HANS_BRINGUP_AGVODOM_H_
+#include "hans_bringup/data_definition.h"
+
+
+typedef struct Coords    //平面坐标结构体
+{
+float x;
+float y;
+}COORDS;
+
+typedef struct AGVState
+{
+int CoSys;
+COORDS Locat_xy;
+float theta;
+float VehSpeed;
+float PassPath;
+float alpha;
+}LOCAT;
+
+
+#endif /* INCLUDE_HANS_BRINGUP_AGVODOM_H_ */

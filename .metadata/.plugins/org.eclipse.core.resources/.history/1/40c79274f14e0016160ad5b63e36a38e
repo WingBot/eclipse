@@ -1,0 +1,118 @@
+/*
+ * HansHardware.cpp
+ *
+ *  Created on: Jul 18, 2016
+ *      Author: Paul&szr@giimagv
+ */
+#include "hans_bringup/data_definition.h"
+#include "hans_bringup/HansHardware.h"
+#include "hans_bringup/AgvPara.h"
+
+#include "math.h"
+
+namespace AGVHardware
+{
+
+	double Get_Rotor_Speed(void)//double Get_Rotor_Speed()
+		{
+		 double delta_cnt;//记录前后读取计数器计数器计数的差值
+		 double w_rotor,line_speed,circle_number = 0;
+
+		 second_cnt = TIM_GetCounter( ENCODER_TIMER );//读取编码器计数值
+		 encoder_timer_overflow_sample = encoder_timer_overflow;//从encoder_timer_overflow中读取溢出次数
+
+		 if ( (ENCODER_TIMER->CR1 & TIM_CounterMode_Down) == TIM_CounterMode_Down )
+		 {
+		 // encoder timer down-counting  编码器是向下计数，
+		  delta_cnt = ( second_cnt - first_cnt - encoder_timer_overflow_sample * (4 * ENCODER_PPR) );
+		 // a negetive value计算前后两次读取的计数总差值
+		 }
+		 else
+		 {
+		 //encoder timer up-counting编码器向上计数
+		  delta_cnt = ( second_cnt - first_cnt + encoder_timer_overflow_sample  * (4 * ENCODER_PPR) );
+		  // a positive value
+		 }
+
+		 first_cnt = second_cnt;//保存第二次的读取值，以便下一次使用
+		 encoder_timer_overflow = 0;//溢出次数清零
+
+		 circle_number = delta_cnt / 400.0 / 98.777946;//计算两次读取时间内车轮转了多少圈
+
+		 //400  :  the count value of CNT for rotor  rotate a circle
+		 //98.777946  :  the decrease speed rate of motor 减速箱的减速比，delta是转子所转的圈数
+
+		 w_rotor = ( circle_number * 2 * 3.141592 ) / 0.03;//计算角速度，2*pi*转的圈数/计数时间（为0.03s）
+
+		 //the wheel's w_rotor ,calculate time is 1 minute
+		 //circle_number * 2 * 3.141592    delta_angle  by radian
+		 //w_rotor      unit:  degree by radian per second
+
+		 line_speed = ( w_rotor * 64.68 / 2.0 ) / 10.0;//计算线速度，v=w*r车轮直径64.68mm,除以10转化为cm
+
+		 //the wheel's line_speed, unit: cm per seconds
+		 //64.68 / 2.0 mm: radius of wheel
+		 //printf ( " w_rotor=%8lf       line_speed =%8lf\r\n ",w_rotor,line_speed );
+
+		 return line_speed;
+		}
+
+	void ComputeOdom(const AGVSENSORS *AgvData, const ushort_int2 LastTime, OdomPackage &OdomMsg)
+	{
+		ushort_int2 CurrentTime;
+		unsigned short int dt;
+		for (int i = 0; i < 2; ++i) {
+			CurrentTime.Bit[i]= AgvData->TimeStamp[i];
+		}
+		dt = CurrentTime.Value - LastTime.Value;
+		wchar_t4 LeftWhlPluse,RightWhlPluse;
+		for (int i = 0; i < 4; ++i) {
+			LeftWhlPluse.Bit[i] = AgvData->WheelLeft_Encoder[i];
+			RightWhlPluse.Bit[i] = AgvData->WheelRight_Encoder[i];
+		}
+		PassPath dPassPath;
+		dPassPath.Left = Cm * (double)LeftWhlPluse.Value;
+		dPassPath.Right = Cm * (double)RightWhlPluse.Value;
+		OdomMsg.PassPath = (dPassPath.Right + dPassPath.Left)/2;
+		OdomMsg.PassTheta = (dPassPath.Right - dPassPath.Right)/WheelBase;
+		OdomMsg.Locat.Theta += OdomMsg.PassTheta;
+		OdomMsg.Locat.X += OdomMsg.PassPath*cos(OdomMsg.PassTheta/2);
+		OdomMsg.Locat.Y += OdomMsg.PassPath*sin(OdomMsg.PassTheta/2);
+		OdomMsg.Velo.Linear = OdomMsg.PassPath/dt;
+		OdomMsg.Velo.Angular = OdomMsg.PassTheta/dt;
+		for (int i = 0; i < 2; ++i) {
+			OdomMsg.TimeStamp.Bit[i]=LastTime.Bit[i];
+		}
+	}
+
+    void DriveCommand(const int LeftWheelSpeed, const int RightWheelSpeed, ControlPackge &CmdPackage)
+      {
+           CommandBit LeftWheel, RightWheel;
+
+           LeftWheel.WheelSpeed = LeftWheelSpeed;
+           RightWheel.WheelSpeed = RightWheelSpeed;
+
+           CmdPackage.cmd.WheelLeft[0] = LeftWheel.NumBit[0];
+           CmdPackage.cmd.WheelLeft[1] = LeftWheel.NumBit[1];
+           CmdPackage.cmd.WheelLeft[2] = LeftWheel.NumBit[2];
+           CmdPackage.cmd.WheelLeft[3] = LeftWheel.NumBit[3];
+
+           CmdPackage.cmd.WheelRight[0] = RightWheel.NumBit[0];
+           CmdPackage.cmd.WheelRight[1] = RightWheel.NumBit[1];
+           CmdPackage.cmd.WheelRight[2] = RightWheel.NumBit[2];
+           CmdPackage.cmd.WheelRight[3] = RightWheel.NumBit[3];
+
+       }
+
+      // Stop the mobile base.
+    ControlPackge StopCommand()
+      {
+          ControlPackge stop_cmd;
+          DriveCommand(0, 0, stop_cmd);
+          return stop_cmd;
+      }
+
+};
+
+
+

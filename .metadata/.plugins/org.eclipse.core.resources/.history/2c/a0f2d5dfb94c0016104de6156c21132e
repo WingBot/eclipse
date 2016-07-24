@@ -1,0 +1,170 @@
+/*
+ * SocketClient.cpp
+ *
+ *  Created on: 2016年7月5日
+ *      Author: birl
+ */
+#include<stdio.h>
+#include "hans_agv_odom/SocketClient.h"
+
+ClientSocket::ClientSocket():b_servset(false)
+{
+	m_sock = -1;
+	memset(&m_servaddr, 0, sizeof(m_servaddr));
+}
+ClientSocket::~ClientSocket()
+{
+//	if ( is_valid() )			//socket描述符还存在时关闭socket.
+//	    close( m_sock );
+}
+bool ClientSocket::creatSocket()
+{
+	m_sock = socket(AF_INET, SOCK_STREAM, 0);
+	if(!is_valid())
+	{
+		printf("Socket creat failed.");
+		return false;
+	}
+	return true;
+}
+
+bool ClientSocket::connetToServer ( const std::string &host, const int port)
+{
+	if (!is_valid()) return false;		//判断socket描述符是否有效．
+	m_servaddr.sin_family = AF_INET;	//IPv4.
+	m_servaddr.sin_port = htons(port);
+//	m_servaddr.sin_addr.s_addr = inet_addr("192.168.1.1");		//IP地址与端口号都是在主程序中指定的，这里只是为了示意补全m_servaddr．
+	if( inet_pton(AF_INET, host.c_str(), &m_servaddr.sin_addr) <= 0)	//将字符串转换成网络字节．
+	{
+		printf("inet_pton error for %s\n",host.c_str());
+		return false;
+	}
+
+//	int conn_statust = connect(m_sock, (sockaddr*)&m_servaddr, sizeof(m_servaddr));
+	if(connect(m_sock, (struct sockaddr*)&m_servaddr, sizeof(m_servaddr)) < 0)	//连接服务器．
+	{
+		printf("Connect URServer error: %s(errno: %d)\n",strerror(errno),errno);
+		return false;
+	}
+	return true;
+}
+//发送不需要请求UR返回信息的命令．
+bool ClientSocket::sendMsg (char* cmd) const
+{
+	//s = s + "\n";
+	if( send(m_sock, cmd, 10, 0) < 0)				//send函数被Modbus TCP以20HZ的频率占用，会影响正常的TCP/IP通信，所以换一组通信函数．
+	{
+		printf("Send msg error: %s(errno: %d)\n", strerror(errno), errno);
+		return false;
+	}
+	return true;
+}
+
+bool ClientSocket::sendMsg (const ControlPackge &cmd) const
+{
+        //s = s + "\n";
+        if( send(m_sock, &cmd, sizeof(cmd), 0) < 0)    //send函数被Modbus TCP以20HZ的频率占用，会影响正常的TCP/IP通信，所以换一组通信函数．
+        {
+                printf("Send msg error: %s(errno: %d)\n", strerror(errno), errno);
+                return false;
+        }
+        return true;
+}
+
+//发送不需要请求UR返回信息的命令．
+bool ClientSocket::sendMsg (std::string s) const
+{
+	//s = s + "\n";
+	if( send(m_sock, s.c_str(), (unsigned int)s.size(), 0) < 0)				//send函数被Modbus TCP以20HZ的频率占用，会影响正常的TCP/IP通信，所以换一组通信函数．
+	{
+		printf("Send msg error: %s(errno: %d)\n", strerror(errno), errno);
+		return false;
+	}
+//	if(write(m_sock, s.c_str(), (unsigned int)s.size()) < 0)
+//	{
+//		printf("Send msg error: %s(errno: %d)\n", strerror(errno), errno);
+//		return false;
+//	}
+	return true;
+}
+
+int ClientSocket::recvMsg ( std::string& s) const
+{
+	char buf[MAX_RECVBYTES + 1];				//接收缓冲区，最后一个用于存放'\0'.
+	s = "";
+	memset(buf, 0, MAX_RECVBYTES + 1);		//初始化缓存区．
+	int status = recv( m_sock,buf, MAX_RECVBYTES ,0 );						//与send函数对应的接收函数．
+	if(-1 == status)
+	{
+		printf("Receive msg error:%s(errno: %d)\n", strerror(errno), errno);
+		return -1;			//接收错误．
+	}
+	return status;
+/*
+	int status = read( m_sock, buf, MAX_RECVBYTES);
+	if(-1 == status)
+	{
+		printf("Receive msg error:%s(errno: %d)\n", strerror(errno), errno);
+		return -1;			//接收错误．
+	}
+	else if(status == 0)
+		return 0;			//接收到了文件结尾处．
+	else
+	{
+		s = buf;				//string 类对'='有操作符重载，所以可以直接赋char数组名．
+		return status;		//返回接收到的字节数．
+	}
+*/
+}
+
+int ClientSocket::recvMsg (AGVDATA &buffer ) const
+{
+//	int status = recv( m_sock,&buffer, MAX_RECVBYTES ,0 );						//与send函数对应的接收函数．
+//        int n = sizeof(buffer);
+        int status = recv( m_sock,&buffer, sizeof(buffer) ,0 );
+	if(-1 == status)
+	{
+		printf("Receive msg error:%s(errno: %d)\n", strerror(errno), errno);
+		return -1;			//接收错误．
+	}
+        else if(status == 0)
+            return 0;                       //接收到了文件结尾处．
+        return status;          //返回接收到的字节数．
+ /*
+	int status = read( m_sock, &buffer, MAX_RECVBYTES+1);
+	if(-1 == status)
+	{
+		printf("Receive msg error:%s(errno: %d)\n", strerror(errno), errno);
+		return -1;			//接收错误．
+	}
+	else if(status == 0)
+		return 0;			//接收到了文件结尾处．
+	return status;		//返回接收到的字节数．
+*/
+}
+
+//发送需要请求UR返回数据的命令，及时接收，避免造成阻塞．(未使用．)
+std::string ClientSocket::sendCommandWithFeedback(std::string & cmd) const
+{
+//	cmd += "\n";		//UR命令格式要求在字符串末尾加＇\n＇．
+	std::string s_feedback= "";
+	if(!sendMsg(cmd))
+	{
+		printf("Connect UR5 server failed.\n");
+		return "SENDFALSE";	//返回发送错误标志字符串．
+	}
+	//命令发送成功，必须接收UR的返回信息，避免造成阻塞．
+	int bytesRec = recvMsg(s_feedback);
+	if(bytesRec <= 0)
+	{
+		printf("Receive feedback data false!");
+		return "RECVFALSE";	//返回接收错误标志字符串．
+	}
+	return s_feedback;
+}
+void ClientSocket::closeClient()
+{
+//	close(m_sock);
+}
+
+

@@ -1,0 +1,17 @@
+/*
+ * ComputeOdomTest.cpp
+ *
+ *  Created on: Jul 19, 2016
+ *      Author: szr@giimagv
+ */
+#include <iostream>
+#include "cstring"
+#include "hans_bringup/HansHardware.h"
+
+void main(int argc, char **argv)
+{
+
+}
+
+
+

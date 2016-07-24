@@ -1,0 +1,10 @@
+11:34:22 **** Incremental Build of configuration Debug for project BoostAsioTCPClient ****
+make all 
+Building target: BoostAsioTCPClient
+Invoking: Cross G++ Linker
+g++  -o "BoostAsioTCPClient"  ./src/BoostAsioTCPClient.o  /usr/local/lib/boost_1_16_0/* 
+Finished building target: BoostAsioTCPClient
+ 
+
+11:34:26 Build Finished (took 4s.210ms)
+

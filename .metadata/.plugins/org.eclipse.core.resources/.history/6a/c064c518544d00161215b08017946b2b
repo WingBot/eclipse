@@ -1,0 +1,28 @@
+/*
+ * HansHardware.h
+ *
+ *  Created on: Jul 18, 2016
+ *      Author: agv
+ */
+
+#ifndef INCLUDE_HANS_BRINGUP_HANSHARDWARE_H_
+#define INCLUDE_HANS_BRINGUP_HANSHARDWARE_H_
+
+
+namespace AGVHardware {
+
+	double WheelSpdGetRadPS(const double *RPM);
+	double WheelSpdGetRPM(const double *RadPS);
+	AgvState ComputeOdom(const AgvVelocity *WheelSpd, float LastTime, AgvState *PreLocat);
+    void DriveCommand(const int LeftWheelSpeed, const int RightWheelSpeed, ControlPackge &CmdPackage);
+    ControlPackge StopCommand(void);
+};
+
+namespace AGVHardware
+{
+        bool DriveCommand(const int LeftWheelSpeed, const int RightWheelSpeed, ControlPackge & cmdPackage);
+        ControlPackge StopCommand(void);
+};
+
+
+#endif /* INCLUDE_HANS_BRINGUP_HANSHARDWARE_H_ */

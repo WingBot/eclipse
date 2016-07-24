@@ -1,0 +1,15 @@
+//============================================================================
+// Name        : BoostAsioTCPClient.cpp
+// Author      : szr
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include <iostream>
+using namespace std;
+
+int main() {
+	cout << "!!!Linux Client!!!" << endl; // prints !!!Linux Client!!!
+	return 0;
+}

@@ -1,0 +1,15 @@
+12:15:10 **** Incremental Build of configuration Debug for project BoostAsioTCPServer ****
+make all 
+Building file: ../src/BoostAsioTCPServer.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/BoostAsioTCPServer.d" -MT"src/BoostAsioTCPServer.o" -o "src/BoostAsioTCPServer.o" "../src/BoostAsioTCPServer.cpp"
+Finished building: ../src/BoostAsioTCPServer.cpp
+ 
+Building target: BoostAsioTCPServer
+Invoking: Cross G++ Linker
+g++  -o "BoostAsioTCPServer"  ./src/BoostAsioTCPServer.o  /usr/local/lib/boost_1_16_0/* 
+Finished building target: BoostAsioTCPServer
+ 
+
+12:15:11 Build Finished (took 1s.347ms)
+

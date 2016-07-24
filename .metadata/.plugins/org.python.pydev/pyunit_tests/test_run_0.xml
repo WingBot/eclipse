@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pydev-testrun version="1.0"?><pydev-testsuite>
+<summary errors="1" failures="0" finished="true" name="Test Run: 0" tests="0" total_time="Finished in: 0.00 secs."/>
+<test location="/home/agv/rostest_ws/src/turtlebot_create/create_node/setup.py" status="error" test="setup" time="0">
+<stdout/>
+<stderr><![CDATA[Traceback (most recent call last):
+  File "/opt/eclipse/plugins/org.python.pydev_5.1.2.201606231256/pysrc/_pydev_runfiles/pydev_runfiles.py", line 468, in __get_module_from_str
+    mod = __import__(modname)
+  File "/opt/eclipse/plugins/org.python.pydev_5.1.2.201606231256/pysrc/setup.py", line 68, in <module>
+    data_files.append(('pydevd_attach_to_process', [os.path.join('pydevd_attach_to_process', f) for f in os.listdir('pydevd_attach_to_process') if accept_file(f)]))
+OSError: [Errno 2] No such file or directory: 'pydevd_attach_to_process'
+ERROR: Module: setup could not be imported (file: /home/agv/rostest_ws/src/turtlebot_create/create_node/setup.py).
+]]></stderr>
+</test>
+<launch mode="debug">
+<launch_memento><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration local="true" path="create_node create_node"/>
+]]></launch_memento>
+</launch>
+</pydev-testsuite>

@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;hans_base/include/RmpLogger.h&apos; to &apos;HansLogger.h&apos;" description="Rename resource &apos;RmpLogger.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="include/RmpLogger.h" name="HansLogger.h" stamp="1469258889739" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;hans_base/src/RmpLogger.cpp&apos; to &apos;HansLogger.cpp&apos;" description="Rename resource &apos;RmpLogger.cpp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/RmpLogger.cpp" name="HansLogger.cpp" stamp="1469259134442" updateReferences="true"/>
+</session>

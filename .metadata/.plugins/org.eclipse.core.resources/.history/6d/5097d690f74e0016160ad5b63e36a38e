@@ -1,0 +1,125 @@
+/*
+ * TcpClientTestNode.cpp
+ *
+ *  Created on: Jul 18, 2016
+ *      Author: szr@giimagv
+ */
+
+
+#include "ros/ros.h"
+#include "cstring"
+#include "geometry_msgs/Twist.h"
+
+#include "hans_bringup/data_definition.h"
+#include "hans_bringup/HansHardware.h"
+#include "hans_bringup/TCPClient.h"
+#include "hans_bringup/AgvPara.h"
+#include "hans_bringup/GeneralFunction.h"
+
+#include "ros/timer.h"
+
+TcpClient AgvClient;
+//ros::Timer timer_;
+ros::Timer ReceTimer;
+void CmdVelCall(const geometry_msgs::TwistConstPtr &Vel)
+{
+    ControlPackge DriveCmd;
+	int Omega_L = (int)(Vel->linear.x / WheelR - (WheelBase * Vel->angular.z)/(2*WheelR)) * 60 * 30;;	//roll/s -> roll/min.
+	int Omega_R = (int)(Vel->linear.x / WheelR + (WheelBase * Vel->angular.z)/(2*WheelR)) * 60 * 30;;
+
+	AGVHardware::DriveCommand(Omega_L, Omega_R, DriveCmd);           //RPM;
+	AgvClient.ClientSend(DriveCmd);
+
+}
+
+
+//void callback1(const geometry_msgs::TwistConstPtr &Vel){}
+void ReadCallback(const ros::TimerEvent& event)
+{
+		  int iGetNum = 0;
+	      char RecvBuffer[80002];
+	      //memset(RecvBuffer, '0', 80002);
+	      iGetNum = AgvClient.ClientReceive(RecvBuffer,sizeof(RecvBuffer),sizeof(RecvBuffer));
+	      if(iGetNum > 0 && (iGetNum % 34 == 0))
+	      {
+	          EncoderNum LeftEncoder, RightEncoder;
+	          Gyroscope Yaw, YawRate;
+	          int n = iGetNum / 34;
+	          unsigned char a = RecvBuffer[n*34 - 34];
+	          //unsigned char b = RecvBuffer[n*34 - 32];
+	          if( a == 170)         //a == 0xaa?
+	          {
+	              LeftEncoder.bitNum[0] = RecvBuffer[n*34 - 24];
+	              LeftEncoder.bitNum[1] = RecvBuffer[n*34 - 23];
+	              LeftEncoder.bitNum[2] = RecvBuffer[n*34 - 22];
+	              LeftEncoder.bitNum[3] = RecvBuffer[n*34 - 21];
+
+	              RightEncoder.bitNum[0] = RecvBuffer[n*34 - 20];
+	              RightEncoder.bitNum[1] = RecvBuffer[n*34 - 19];
+	              RightEncoder.bitNum[2] = RecvBuffer[n*34 - 18];
+	              RightEncoder.bitNum[3] = RecvBuffer[n*34 - 17];
+	          }
+	          int leftN1 = LeftEncoder.pulseNum;
+	          int rightN1= RightEncoder.pulseNum;
+	          ROS_INFO("===============");
+	          ROS_INFO("Left Encoder Pulse Num = %d", LeftEncoder.pulseNum);
+	          ROS_INFO("right Encoder Pulse Num = %d", RightEncoder.pulseNum);
+	          ROS_INFO("******************");
+	          a = RecvBuffer[n*34 - 10];
+	          //b = RecvBuffer[n*34 - 9];
+	          if( a == 4)         //a == 0x04?
+	          {
+	              Yaw.bitNum[0] = RecvBuffer[n*34 - 8];
+	              Yaw.bitNum[1] = RecvBuffer[n*34 - 7];
+	              YawRate.bitNum[0] = RecvBuffer[n*34 - 6];
+	              YawRate.bitNum[1] = RecvBuffer[n*34 - 5];
+	          }
+	          ROS_INFO("===============");
+	          ROS_INFO("Gyroscope's Yaw = %d", Yaw.GyroValue);
+	          ROS_INFO("Gyroscope's Yaw rate = %d", YawRate.GyroValue);
+	          ROS_INFO("******************");
+	//          int leftN2 = LeftEncoder.pulseNum;
+	//          int rightN2= RightEncoder.pulseNum;
+	//          ROS_INFO("===============");
+	//          ROS_INFO("Left Encoder differ = %d", leftN2-leftN1);
+	//          ROS_INFO("right Encoder Pulse differ = %d", rightN2 - rightN1);
+	//          ROS_INFO("******************");
+	      }
+	      else if(iGetNum == -1)
+	        ROS_INFO("receive msg faile.");
+	}
+
+//
+	//AGVDATA Buffer;
+//
+	//AgvClient.ClientReceive(Buffer);
+//
+//}
+
+int main(int argc, char** argv)
+{
+	ros::init(argc, argv, "AgvTcpTestNode2");
+	ros::NodeHandle n;
+	AgvClient.ClientControl("192.168.1.33", 2000);
+
+	//timer_ = ros_h.createTimer(ros::Duration(0.01), boost::bind(&dataRecev));
+	//ros::Subscriber VelSub = n.subscribe("/cmd_vel", 100, CmdVelCall);
+	//ros::topic::waitForMessage<geometry_msgs::Twist>("/cmd_vel");
+	ReceTimer = n.createTimer(ros::Duration(0.01), ReadCallback);
+
+
+	ros::Rate loopRate(8);
+	while(n.ok())
+	{
+		ros::spinOnce();              	 // check for incoming messages
+		loopRate.sleep();
+	}
+	AgvClient.ClientCloseSockfd();
+	exit(0);
+
+}
+
+
+
+
+

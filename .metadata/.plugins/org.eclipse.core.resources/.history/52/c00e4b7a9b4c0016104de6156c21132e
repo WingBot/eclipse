@@ -1,0 +1,55 @@
+/*
+ * AGVOdom.h
+ *
+ *  Created on: Jul 18, 2016
+ *      Author: agv
+ */
+
+#ifndef INCLUDE_HANS_BRINGUP_AGVODOM_H_
+#define INCLUDE_HANS_BRINGUP_AGVODOM_H_
+#include "hans_bringup/data_definition.h"
+
+
+typedef struct Coords   	//平面坐标结构体
+{
+float x;
+float y;
+float heading;
+}COORDS;
+
+typedef struct Velocity
+{
+float Linear;
+float Angular;
+}VELS;
+
+typedef struct WheelSpd
+{
+	float WheelSpd1;
+	float WheelSpd2;
+}WHL_SPD;
+
+typedef struct AGVStates 	//AGV状态向量结构体
+{
+COORDS Pose;
+VELS Velocity;
+WHL_SPD WhlSpd;
+float PassPath;
+float alpha;
+}AGVSTATES;
+
+
+
+
+void WheelSpeedCal(char encoder_npluse)
+{
+
+}
+
+
+
+
+
+
+
+#endif /* INCLUDE_HANS_BRINGUP_AGVODOM_H_ */

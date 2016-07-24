@@ -1,0 +1,20 @@
+/*
+ * compute_odom.h
+ *
+ *  Created on: Jul 16, 2016
+ *      Author: szr@giimagv
+ */
+
+#ifndef INCLUDE_HANS_AGV_ODOM_COMPUTEODOM_H_
+#define INCLUDE_HANS_AGV_ODOM_COMPUTEODOM_H_
+
+
+namespace HANsAGV
+{
+//    def compute_odom(self, sensor_state, last_time, odom):
+        bool ComputeOdom(const int LeftWheelSpeed, const int RightWheelSpeed, AGVDATA *SensorState);
+        ControlPackge StopCommand(void);
+};
+
+
+#endif /* INCLUDE_HANS_AGV_ODOM_COMPUTEODOM_H_ */

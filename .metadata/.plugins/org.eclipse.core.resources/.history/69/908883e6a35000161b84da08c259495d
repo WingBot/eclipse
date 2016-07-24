@@ -1,0 +1,28 @@
+/*
+ * HansMessage.h
+ *
+ *  Created on: Jul 23, 2016
+ *      Author: agv
+ */
+
+#ifndef HANS_INCLUDE_HANSMESSAGE_H_
+#define HANS_INCLUDE_HANSMESSAGE_H_
+
+namespace HansMotor
+{
+  /**
+   * Define Rmp Message Ids
+   * Please read the rmp user manual (for instance, page 38 of the RMP 440LE manual)
+   */
+  enum RmpMessageId
+  {
+    STANDARD_MOTION = 0x500,
+    CONFIGURATION_CMD,
+    CAN_RMP_RESP,
+    OMNI_MOTION = 0x600
+  };
+} // segway
+
+
+
+#endif /* HANS_INCLUDE_HANSMESSAGE_H_ */

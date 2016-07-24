@@ -1,0 +1,86 @@
+09:24:51 **** Incremental Build of configuration Debug for project AgvTcpClient ****
+make all 
+Building file: ../src/AgvTcpClient.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/AgvTcpClient.d" -MT"src/AgvTcpClient.o" -o "src/AgvTcpClient.o" "../src/AgvTcpClient.cpp"
+../src/AgvTcpClient.cpp:27:29: error: no matching function for call to ‘boost::asio::basic_deadline_timer<boost::posix_time::ptime>::basic_deadline_timer()’
+ boost::asio::deadline_timer m_Timer;
+                             ^
+../src/AgvTcpClient.cpp:27:29: note: candidates are:
+In file included from /usr/include/boost/asio.hpp:22:0,
+                 from ../src/AgvTcpClient.cpp:11:
+/usr/include/boost/asio/basic_deadline_timer.hpp:182:3: note: boost::asio::basic_deadline_timer<Time, TimeTraits, TimerService>::basic_deadline_timer(boost::asio::io_service&, const duration_type&) [with Time = boost::posix_time::ptime; TimeTraits = boost::asio::time_traits<boost::posix_time::ptime>; TimerService = boost::asio::deadline_timer_service<boost::posix_time::ptime, boost::asio::time_traits<boost::posix_time::ptime> >; boost::asio::basic_deadline_timer<Time, TimeTraits, TimerService>::duration_type = boost::posix_time::time_duration]
+   basic_deadline_timer(boost::asio::io_service& io_service,
+   ^
+/usr/include/boost/asio/basic_deadline_timer.hpp:182:3: note:   candidate expects 2 arguments, 0 provided
+/usr/include/boost/asio/basic_deadline_timer.hpp:163:3: note: boost::asio::basic_deadline_timer<Time, TimeTraits, TimerService>::basic_deadline_timer(boost::asio::io_service&, const time_type&) [with Time = boost::posix_time::ptime; TimeTraits = boost::asio::time_traits<boost::posix_time::ptime>; TimerService = boost::asio::deadline_timer_service<boost::posix_time::ptime, boost::asio::time_traits<boost::posix_time::ptime> >; boost::asio::basic_deadline_timer<Time, TimeTraits, TimerService>::time_type = boost::posix_time::ptime]
+   basic_deadline_timer(boost::asio::io_service& io_service,
+   ^
+/usr/include/boost/asio/basic_deadline_timer.hpp:163:3: note:   candidate expects 2 arguments, 0 provided
+/usr/include/boost/asio/basic_deadline_timer.hpp:148:12: note: boost::asio::basic_deadline_timer<Time, TimeTraits, TimerService>::basic_deadline_timer(boost::asio::io_service&) [with Time = boost::posix_time::ptime; TimeTraits = boost::asio::time_traits<boost::posix_time::ptime>; TimerService = boost::asio::deadline_timer_service<boost::posix_time::ptime, boost::asio::time_traits<boost::posix_time::ptime> >]
+   explicit basic_deadline_timer(boost::asio::io_service& io_service)
+            ^
+/usr/include/boost/asio/basic_deadline_timer.hpp:148:12: note:   candidate expects 1 argument, 0 provided
+/usr/include/boost/asio/basic_deadline_timer.hpp:126:7: note: boost::asio::basic_deadline_timer<boost::posix_time::ptime>::basic_deadline_timer(const boost::asio::basic_deadline_timer<boost::posix_time::ptime>&)
+ class basic_deadline_timer
+       ^
+/usr/include/boost/asio/basic_deadline_timer.hpp:126:7: note:   candidate expects 1 argument, 0 provided
+../src/AgvTcpClient.cpp: In function ‘size_t Receive(Bytes&, float, boost::system::error_code&)’:
+../src/AgvTcpClient.cpp:36:5: error: ‘Socket’ was not declared in this scope
+     Socket.async_receive(boost::asio::buffer(m_ReadBuffer), boost::bind(&Impl::Handle, _1, _2, &rErrorCode, &size));
+     ^
+../src/AgvTcpClient.cpp:36:46: error: ‘m_ReadBuffer’ was not declared in this scope
+     Socket.async_receive(boost::asio::buffer(m_ReadBuffer), boost::bind(&Impl::Handle, _1, _2, &rErrorCode, &size));
+                                              ^
+../src/AgvTcpClient.cpp:36:61: error: ‘bind’ is not a member of ‘boost’
+     Socket.async_receive(boost::asio::buffer(m_ReadBuffer), boost::bind(&Impl::Handle, _1, _2, &rErrorCode, &size));
+                                                             ^
+../src/AgvTcpClient.cpp:36:61: note: suggested alternatives:
+In file included from /usr/include/netinet/in.h:23:0,
+                 from /usr/include/netdb.h:27,
+                 from /usr/include/boost/asio/error.hpp:25,
+                 from /usr/include/boost/asio/detail/impl/posix_event.ipp:24,
+                 from /usr/include/boost/asio/detail/posix_event.hpp:95,
+                 from /usr/include/boost/asio/detail/event.hpp:25,
+                 from /usr/include/boost/asio/detail/task_io_service_thread_info.hpp:18,
+                 from /usr/include/boost/asio/impl/handler_alloc_hook.ipp:27,
+                 from /usr/include/boost/asio/handler_alloc_hook.hpp:80,
+                 from /usr/include/boost/asio/detail/handler_alloc_helpers.hpp:21,
+                 from /usr/include/boost/asio/detail/bind_handler.hpp:19,
+                 from /usr/include/boost/asio/detail/wrapped_handler.hpp:18,
+                 from /usr/include/boost/asio/io_service.hpp:25,
+                 from /usr/include/boost/asio/basic_io_object.hpp:19,
+                 from /usr/include/boost/asio/basic_socket.hpp:20,
+                 from /usr/include/boost/asio/basic_datagram_socket.hpp:20,
+                 from /usr/include/boost/asio.hpp:21,
+                 from ../src/AgvTcpClient.cpp:11:
+/usr/include/x86_64-linux-gnu/sys/socket.h:123:12: note:   ‘bind’
+ extern int bind (int __fd, __CONST_SOCKADDR_ARG __addr, socklen_t __len)
+            ^
+In file included from /usr/include/boost/asio/detail/socket_ops.hpp:319:0,
+                 from /usr/include/boost/asio/detail/socket_holder.hpp:20,
+                 from /usr/include/boost/asio/detail/reactive_socket_accept_op.hpp:24,
+                 from /usr/include/boost/asio/detail/reactive_socket_service.hpp:30,
+                 from /usr/include/boost/asio/datagram_socket_service.hpp:28,
+                 from /usr/include/boost/asio/basic_datagram_socket.hpp:21,
+                 from /usr/include/boost/asio.hpp:21,
+                 from ../src/AgvTcpClient.cpp:11:
+/usr/include/boost/asio/detail/impl/socket_ops.ipp:266:5: note:   ‘boost::asio::detail::socket_ops::bind’
+ int bind(socket_type s, const socket_addr_type* addr,
+     ^
+../src/AgvTcpClient.cpp:36:74: error: ‘Impl’ has not been declared
+     Socket.async_receive(boost::asio::buffer(m_ReadBuffer), boost::bind(&Impl::Handle, _1, _2, &rErrorCode, &size));
+                                                                          ^
+../src/AgvTcpClient.cpp:36:88: error: ‘_1’ was not declared in this scope
+     Socket.async_receive(boost::asio::buffer(m_ReadBuffer), boost::bind(&Impl::Handle, _1, _2, &rErrorCode, &size));
+                                                                                        ^
+../src/AgvTcpClient.cpp:36:92: error: ‘_2’ was not declared in this scope
+     Socket.async_receive(boost::asio::buffer(m_ReadBuffer), boost::bind(&Impl::Handle, _1, _2, &rErrorCode, &size));
+                                                                                            ^
+../src/AgvTcpClient.cpp:40:7: error: ‘m_IoService’ was not declared in this scope
+       m_IoService.run_one();
+       ^
+make: *** [src/AgvTcpClient.o] Error 1
+
+09:24:55 Build Finished (took 3s.302ms)
+

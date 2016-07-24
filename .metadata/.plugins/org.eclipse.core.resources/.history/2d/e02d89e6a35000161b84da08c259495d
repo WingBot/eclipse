@@ -1,0 +1,21 @@
+/*
+ * HansType.h
+ *
+ *  Created on: Jul 23, 2016
+ *      Author: agv
+ */
+
+#ifndef HANS_INCLUDE_HANSTYPE_H_
+#define HANS_INCLUDE_HANSTYPE_H_
+
+#include <vector>
+
+namespace HansMotor
+{
+  typedef std::vector<uint8_t> Bytes;
+} // namespace segway
+
+
+
+
+#endif /* HANS_INCLUDE_HANSTYPE_H_ */

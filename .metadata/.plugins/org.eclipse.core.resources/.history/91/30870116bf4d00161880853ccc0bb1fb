@@ -1,0 +1,66 @@
+//============================================================================
+// Name        : datatype.cpp
+// Author      : 
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include<iostream>
+#include<string>
+#include <limits>
+#include <climits>
+using namespace std;
+
+int main()
+{
+    cout << "bool: \t\t" << "所占字节数：" << sizeof(bool);
+    cout << "\t取值范围：" << (numeric_limits<bool>::min)();
+    cout << " ~ " <<(numeric_limits<bool>::max)()<< endl;
+    cout << "char: \t\t" << "所占字节数：" << sizeof(char);
+    cout << "\t取值范围：" << (numeric_limits<char>::min)();
+    cout << " ~ " <<(numeric_limits<char>::max)()<< endl;
+    cout << "signed char: \t" << "所占字节数：" << sizeof(signed char);
+    cout << "\t取值范围：" << (numeric_limits<signed char>::min)();
+    cout << " ~ " <<(numeric_limits<signed char>::max)()<< endl;
+    cout << "unsigned char: \t" << "所占字节数：" << sizeof(unsigned char);
+    cout << "\t取值范围：" << (numeric_limits<signed char>::min)();
+    cout << " ~ " <<(numeric_limits<signed char>::max)()<< endl;
+    cout << "wchar_t: \t" << "所占字节数：" << sizeof(wchar_t);
+    cout << "\t取值范围：" << (numeric_limits<signed char>::min)();
+    cout << " ~ " <<(numeric_limits<signed char>::max)()<< endl;
+    cout << "short: \t\t" << "所占字节数：" << sizeof(short);
+    cout << "\t取值范围：" << (numeric_limits<signed char>::min)();
+    cout << " ~ " <<(numeric_limits<signed char>::max)()<< endl;
+    cout << "int: \t\t" << "所占字节数：" << sizeof(int);
+    cout << "\t取值范围：" << (numeric_limits<signed char>::min)();
+    cout << " ~ " <<(numeric_limits<signed char>::max)()<< endl;
+    cout << "unsigned: \t" << "所占字节数：" << sizeof(unsigned);
+    cout << "\t取值范围：" << (numeric_limits<signed char>::min)();
+    cout << " ~ " <<(numeric_limits<signed char>::max)()<< endl;
+    cout << "long: \t\t" << "所占字节数：" << sizeof(long);
+    cout << "\t取值范围：" << (numeric_limits<signed char>::min)();
+    cout << " ~ " <<(numeric_limits<signed char>::max)()<< endl;
+    cout << "unsigned long: \t" << "所占字节数：" << sizeof(unsigned long);
+    cout << "\t取值范围：" << (numeric_limits<signed char>::min)();
+    cout << " ~ " <<(numeric_limits<signed char>::max)()<< endl;
+    cout << "double: \t" << "所占字节数：" << sizeof(double);
+    cout << "\t取值范围：" << (numeric_limits<signed char>::min)();
+    cout << " ~ " <<(numeric_limits<signed char>::max)()<< endl;
+    cout << "long double: \t" << "所占字节数：" << sizeof(long double);
+    cout << "\t取值范围：" << (numeric_limits<signed char>::min)();
+    cout << " ~ " <<(numeric_limits<signed char>::max)()<< endl;
+    cout << "float: \t\t" << "所占字节数：" << sizeof(float);
+    cout << "\t取值范围：" << (numeric_limits<signed char>::min)();
+    cout << " ~ " <<(numeric_limits<signed char>::max)()<< endl;
+    cout << "size_t: \t" << "所占字节数：" << sizeof(size_t);
+    cout << "\t取值范围：" << (numeric_limits<signed char>::min)();
+    cout << " ~ " <<(numeric_limits<signed char>::max)()<< endl;
+    cout << "string: \t" << "所占字节数：" << sizeof(string);
+    cout << "\t取值范围：" << (numeric_limits<signed char>::min)();
+    cout << " ~ " <<(numeric_limits<signed char>::max)()<< endl;
+    cout << "long long: \t" << "所占字节数：" << sizeof(long long);
+    cout << "\t取值范围：" << (numeric_limits<signed char>::min)();
+    cout << " ~ " <<(numeric_limits<signed char>::max)()<< endl;
+    return 0;
+}

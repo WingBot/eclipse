@@ -1,0 +1,79 @@
+/*
+ * Han_driver_node.cpp
+ *
+ *  Created on: 2016年7月5日
+ *      Author: birl
+ */
+#include <hans_agv_odom/command_function.h>
+#include "ros/ros.h"
+#include "cstring"
+#include "hans_agv_odom/SocketClient.h"
+#include "geometry_msgs/Twist.h"
+
+
+#define lowBit(x) (x)&0xFF
+#define highBit(x) ((x)>>8)&0xFF
+
+const float robot_R = 0.0675;	//车轮半径
+const float robot_B = 0.589;	//轮距
+
+ClientSocket soc;
+
+void cmdVel_CB(const geometry_msgs::TwistConstPtr &vel)
+{
+    ControlPackge drive_cmd;
+	int Omega_L = (int)(vel->linear.x / robot_R - (robot_B * vel->angular.z)/(2*robot_R)) * 60;	//roll/s -> roll/min.
+	int Omega_R = (int)(vel->linear.x / robot_R + (robot_B * vel->angular.z)/(2*robot_R)) * 60;
+
+	HANsAGV::DriveCommand(Omega_L, Omega_R, drive_cmd);                 //RPM;
+	soc.sendMsg(drive_cmd);
+//	wheel_R.lowBit_ = 5;
+//	driver_cmd[9] = driver_cmd[0];
+//	ROS_INFO("%x", wheel_R.lowBit_);
+}
+
+int main(int argc, char** argv)
+{
+	ros::init(argc, argv, "URTCPConnect_node");
+	ros::NodeHandle ros_h;
+
+	if(!soc.creatSocket())
+	{
+	        ROS_INFO("Creating socket failed.;");
+		return -1;
+	}
+	if(!soc.connetToServer("192.168.1.33", 2000))
+	{
+	        ROS_INFO("Connecting to server failed.");
+		return -2;
+	}
+
+//	ros::Subscriber joy_sub = ros_h.subscribe<sensor_msgs::Joy>("joy", 10, &joycallBack);		//手柄消息回调函数．
+
+	ros::Subscriber vel_sub = ros_h.subscribe("/cmd_vel", 100, &cmdVel_CB);
+	ros::topic::waitForMessage<geometry_msgs::Twist>("cmd_vel");
+
+//	ControlPackge drive_cmd;
+////	HANsAGV::DriveCommand(1000, 1000, drive_cmd);                 //1000 RPM;
+//	drive_cmd = HANsAGV::StopCommand();
+//	soc.sendMsg(drive_cmd);
+
+	AGVDATA buffer;
+	if(soc.recvMsg(buffer) == 0)
+		return -3;
+
+	ros::Rate loop_rate(8);
+	while(ros_h.ok())
+	{
+	//	soc.sendMsg(driver_cmd);
+		ros::spinOnce();              	 // check for incoming messages
+		loop_rate.sleep();
+	}
+
+//	ros::spin();
+	exit(0);
+}
+
+
+
+

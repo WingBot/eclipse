@@ -1,0 +1,34 @@
+/*
+ * ComputeOdom.h
+ *
+ *  Created on: Jul 16, 2016
+ *      Author: szr@giimagv
+ */
+
+#ifndef INCLUDE_HANS_AGV_ODOM_COMPUTEODOM_H_
+#define INCLUDE_HANS_AGV_ODOM_COMPUTEODOM_H_
+
+typedef struct Coords
+{
+	float x;
+	float y;
+}COORDS;
+
+typedef struct Location
+{
+	COORDS Locat_xy;      	    //Current position
+	float Theta;          	    //AGV heading
+	float AGVSpeed;     		//AGV linear
+	float AGVOmiga;		  	    //AGV angular
+	unsigned char CoSys;    //Referance
+}LOCAT;
+
+namespace HANsAGV
+{
+//    def compute_odom(self, sensor_state, last_time, odom):
+        bool ComputeOdom(const int LeftWheelSpeed, const int RightWheelSpeed, AGVDATA *SensorState);
+        ControlPackge StopCommand(void);
+};
+
+
+#endif /* INCLUDE_HANS_AGV_ODOM_COMPUTEODOM_H_ */

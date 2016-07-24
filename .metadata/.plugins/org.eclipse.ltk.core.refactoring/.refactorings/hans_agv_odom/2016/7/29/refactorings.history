@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;hans_agv_odom/include/hans_agv_odom/compute_odom.h&apos; to &apos;ComputeOdom.h&apos;" description="Rename resource &apos;compute_odom.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="include/hans_agv_odom/compute_odom.h" name="ComputeOdom.h" stamp="1468678220373" updateReferences="true"/>
+</session>

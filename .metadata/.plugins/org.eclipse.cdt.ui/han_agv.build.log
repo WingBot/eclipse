@@ -1,0 +1,12 @@
+14:16:12 **** Build of configuration Default for project han_agv ****
+eclipsemake all 
+cd /home/agv/AGV_ws/build && /usr/bin/cmake -H/home/agv/AGV_ws/src -B/home/agv/AGV_ws/build --check-build-system CMakeFiles/Makefile.cmake 0
+cd /home/agv/AGV_ws/build && /usr/bin/cmake -E cmake_progress_start /home/agv/AGV_ws/build/CMakeFiles /home/agv/AGV_ws/build/han_agv/CMakeFiles/progress.marks
+cd /home/agv/AGV_ws/build && make -f CMakeFiles/Makefile2 han_agv/all
+make[1]: Entering directory `/home/agv/AGV_ws/build'
+make[1]: *** No rule to make target `han_agv/all'.  Stop.
+make[1]: Leaving directory `/home/agv/AGV_ws/build'
+make: *** [all] Error 2
+
+14:16:13 Build Finished (took 240ms)
+
