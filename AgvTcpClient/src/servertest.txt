@@ -1,0 +1,35 @@
+/*
+ * servertest.cpp
+ *
+ *  Created on: Aug 2, 2016
+ *      Author: agv
+ */
+
+#include "syncsocket_server.h"
+#include <boost/thread.hpp>
+#include <boost/bind.hpp>
+const int TIMEOUT = 50;//单位：ms
+
+int main(int argc, char **argv) {
+	try {
+		std::cout<<"waiting..."<<std::endl;
+		boost::asio::io_service io_service;
+		boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string("127.0.0.1"),2000);
+		tcpserver server(io_service,endpoint);
+		//server.write_handle(TIMEOUT);
+		server.acceptor();
+		//boost::thread thread1(boost::bind(&tcpserver::acceptor,&server,TIMEOUT));
+
+		boost::thread thread2(boost::bind(&tcpserver::write_handle,&server,TIMEOUT));
+
+
+			   // thread1.join();
+			    thread2.join();
+
+
+	} catch (std::exception &e) {
+		std::cerr<<e.what()<<std::endl;
+	}
+	return 0;
+}
+

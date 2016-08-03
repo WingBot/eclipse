@@ -1,0 +1,144 @@
+/*
+ * boostsocket.cpp
+ *
+ *  Created on: Aug 1, 2016
+ *      Author: agv
+ */
+#ifndef SYNCSOCKET_TXT_
+#define SYNCSOCKET_TXT_
+
+#include <iostream>
+#include <boost/array.hpp>
+#include <boost/asio.hpp>
+#include <boost/timer/timer.hpp>
+#include <boost/date_time/posix_time/posix_time_types.hpp>
+#include <boost/asio/deadline_timer.hpp>
+
+#include "agvcmdFunction.h"
+#include "data_definition.h"
+
+const size_t MAX_RCV_SIZE = 1024*2;
+const size_t MAX_SEND_SIZE = sizeof(ControlPackge);
+
+using boost::asio::ip::tcp;
+
+
+class tcpclient{
+public:
+	tcpclient(boost::asio::io_service &io_service)
+						:soc_(io_service),
+						 timer_(io_service)
+				{}
+	void connect(tcp::endpoint &iendpoint)
+	{
+		boost::system::error_code error;
+		soc_.connect(iendpoint,error);
+		if (error) {
+			std::cout<<"reconnect."<<std::endl;
+			soc_.connect(iendpoint);
+		}
+
+	}
+	int read_handle(int timeout)
+	{
+		for(;;){
+	    //AGVDATA agv_buffer_;
+	    U_uint16_t time_temp;
+	    U_uint32_t PWMLeft, PWMRight;
+	    U_uint16_t Gyro_angle,Gyro_angleRate;
+		VBytes read_buff_;
+		read_buff_.resize(MAX_RCV_SIZE);
+		boost::system::error_code error;
+		size_t slen_ = soc_.read_some(boost::asio::buffer(read_buff_),error);
+		if (error == boost::asio::error::eof)
+			break;
+		else if (error)
+			throw boost::system::error_code(error);
+		//测试本机服务器
+		/*time_temp.bit[0] = read_buff_[5];
+		time_temp.bit[1] = read_buff_[6];
+        PWMLeft.bit[0] = read_buff_[10];
+        PWMLeft.bit[1] = read_buff_[11];
+		PWMLeft.bit[2] = read_buff_[12];
+		PWMLeft.bit[3] = read_buff_[13];
+
+		PWMRight.bit[0] = read_buff_[14];
+		PWMRight.bit[1] = read_buff_[15];
+		PWMRight.bit[2] = read_buff_[16];
+		PWMRight.bit[3] = read_buff_[17];*/
+		//std::cout<<slen_<<"\t"<<time_temp.value<<"\t"<<PWMLeft.value<<"\t"<<PWMRight.value<<std::endl;
+
+		if(slen_ > 0 && ( slen_ % 34 == 0))
+		{
+			int Nfull = slen_ / 34;
+			uint8_t str_begin = read_buff_[Nfull*34 -34];
+			if(str_begin == 170)  //0xaa
+			{
+				time_temp.bit[0] = read_buff_[Nfull*34 - 29];
+				time_temp.bit[1] = read_buff_[Nfull*34 - 28];
+				//agv_buffer_.SensorsData.TimeStamp.bit[0] = read_buff_[Nfull*34 - 29];
+				//agv_buffer_.SensorsData.TimeStamp.bit[1] = read_buff_[Nfull*34 - 28];
+				PWMLeft.bit[0] = read_buff_[Nfull*34 - 24];
+				PWMLeft.bit[1] = read_buff_[Nfull*34 - 23];
+				PWMLeft.bit[2] = read_buff_[Nfull*34 - 22];
+				PWMLeft.bit[3] = read_buff_[Nfull*34 - 21];
+
+				PWMRight.bit[0] = read_buff_[Nfull*34 - 20];
+				PWMRight.bit[1] = read_buff_[Nfull*34 - 19];
+				PWMRight.bit[2] = read_buff_[Nfull*34 - 18];
+				PWMRight.bit[3] = read_buff_[Nfull*34 - 17];
+			}
+			str_begin = read_buff_[Nfull*34 - 10];//陀螺仪的帧头
+			if (str_begin == 4)//0x04
+			{
+				Gyro_angle.bit[0] = read_buff_[Nfull*34 - 8];
+				Gyro_angle.bit[1] = read_buff_[Nfull*34 - 7];
+				Gyro_angleRate.bit[0] = read_buff_[Nfull*34 - 6];
+				Gyro_angleRate.bit[1] = read_buff_[Nfull*34 - 5];
+
+			}
+			std::cout<<"recv bytes:"<<slen_\
+							   <<"\ttime:"<<time_temp.value\
+					           <<"\tleft:"<<PWMLeft.value\
+					           <<"\tright:"<<PWMRight.value\
+							   <<"\tangle:"<<Gyro_angle.value\
+							   <<"\tangleRate:"<<Gyro_angleRate.value<<std::endl;
+		}
+		else if (slen_ == 0) {
+					std::cout<<"receive fail."<<std::endl;
+		}
+		timer_.expires_from_now(boost::posix_time::milliseconds(timeout));
+		timer_.wait();
+	    }
+		return 0;
+	}
+
+	int write_handle(ControlPackge &cmd,int timeout)
+	{
+		for(;;){
+		//ControlPackge Buffer;
+		char write_buff[sizeof(ControlPackge)];
+		memset(write_buff,'0',sizeof(write_buff));
+		FillCmd2Buff(write_buff,cmd);
+		boost::system::error_code error;
+		//size_t slen_ = soc_.write_some(boost::asio::buffer(write_buff),error);
+		soc_.write_some(boost::asio::buffer(write_buff),error);
+		if (error == boost::asio::error::eof)
+			break;
+		else if (error)
+			throw boost::system::error_code(error);
+		std::cout<<"cmd:\t"<<cmd.cmd.WheelLeft.value<<std::endl;
+		//std::cout<<"send bytes:"<<slen_<<std::endl;
+		timer_.expires_from_now(boost::posix_time::milliseconds(timeout));
+		timer_.wait();
+		}
+		return 0 ;
+	}
+
+private:
+tcp::socket soc_;
+boost::asio::deadline_timer timer_;
+};
+
+#endif
+

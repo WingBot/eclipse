@@ -11,7 +11,32 @@
 #include <boost/asio.hpp>
 #include <boost/timer/timer.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
+#include <boost/asio/deadline_timer.hpp>
+#include "data_definition.h"
+union Timer_Stamp
+{
+    uint16_t value;     //单个轮子的轮速(RPM),注意单位的统一。
+    uint8_t NumBit[2];     //轮速对应的四个字节。
+};
+bool DriveCommand(const int LeftWheelSpeed, const int RightWheelSpeed, ControlPackge & cmdPackage)
+      {
+           CommandBit LeftWheel, RightWheel;
 
+           LeftWheel.WheelSpeed = LeftWheelSpeed;
+           RightWheel.WheelSpeed = RightWheelSpeed;
+
+           cmdPackage.cmd.WheelLeft.bit[0] = LeftWheel.NumBit[0];
+           cmdPackage.cmd.WheelLeft.bit[1] = LeftWheel.NumBit[1];
+           cmdPackage.cmd.WheelLeft.bit[2] = LeftWheel.NumBit[2];
+           cmdPackage.cmd.WheelLeft.bit[3] = LeftWheel.NumBit[3];
+
+           cmdPackage.cmd.WheelRight.bit[0] = RightWheel.NumBit[0];
+           cmdPackage.cmd.WheelRight.bit[1] = RightWheel.NumBit[1];
+           cmdPackage.cmd.WheelRight.bit[2] = RightWheel.NumBit[2];
+           cmdPackage.cmd.WheelRight.bit[3] = RightWheel.NumBit[3];
+
+          return true;
+      }
 /*
  * 主要流程如下：
 通过tcp::socket类定义一个tcp client对象socket
@@ -24,61 +49,83 @@
 
 typedef std::vector<uint8_t> Bytes;
 using boost::asio::ip::tcp;
-boost::asio::deadline_timer m_Timer;
+//boost::asio::deadline_timer m_Timer;
+const int MAX_RCV_SIZE = 1024;
+const int TIMEOUT = 40; //milliseconds
+const int LEFT_PWM = 0;
+const int RIGHT_PWM = 0;
 
-size_t Receive(Bytes& rData, float timeout, boost::system::error_code& rErrorCode)
-  {
-    m_Timer.expires_from_now(boost::posix_time::milliseconds(timeout));
 
-    rErrorCode = boost::asio::error::would_block;
-    size_t size = 0;
 
-    Socket.async_receive(boost::asio::buffer(m_ReadBuffer), boost::bind(&Impl::Handle, _1, _2, &rErrorCode, &size));
 
-    do
-    {
-      m_IoService.run_one();
-    }
-    while (rErrorCode == boost::asio::error::would_block);
-
-    if (size >= rData.size())
-    {
-      size_t startIdx = size - rData.size();
-      rData.assign(m_ReadBuffer.begin() + startIdx, m_ReadBuffer.end() - 1);
-    }
-    else
-    {
-      rData.assign(m_ReadBuffer.begin(), m_ReadBuffer.end() - 1);
-    }
-
-    return size;
-  }
-
-    int main(int argc, char* argv[])
+    int main(int argc, char**argv)
     {
         try
         {
+        	std::cout<<"bytes:"<<std::endl;
             boost::asio::io_service io_service;
             tcp::endpoint end_point(boost::asio::ip::address::from_string("192.168.1.33"), 2000);
-
+            boost::asio::deadline_timer timer(io_service);
             tcp::socket socket(io_service);
             socket.connect(end_point);
 
-            for (;;)
-            {
-            	//AGVDATA Buffer;
-                boost::array<char, 128> buf;
+
+            	ControlPackge Buffer;
+            	DriveCommand(LEFT_PWM,RIGHT_PWM,Buffer);
+				char write_buff[sizeof(Buffer)];
+				memset(write_buff,'0',sizeof(write_buff));
+				write_buff[0] = Buffer.FrameDataHeader.FrameHeader.bit[0];
+				write_buff[1] = Buffer.FrameDataHeader.FrameHeader.bit[1];
+				write_buff[2] = Buffer.FrameDataHeader.DatasLength;
+				write_buff[3] = Buffer.cmd.DataHeader;
+				write_buff[4] = Buffer.cmd.DataLenght;
+				write_buff[5] = Buffer.cmd.WheelLeft.bit[0];
+				write_buff[6] = Buffer.cmd.WheelLeft.bit[1];
+				write_buff[7] = Buffer.cmd.WheelLeft.bit[2];
+				write_buff[8] = Buffer.cmd.WheelLeft.bit[3];
+				write_buff[9] = Buffer.cmd.WheelRight.bit[0];
+				write_buff[10] = Buffer.cmd.WheelRight.bit[1];
+				write_buff[11] = Buffer.cmd.WheelRight.bit[2];
+				write_buff[12] = Buffer.cmd.WheelRight.bit[3];
+				write_buff[13] = Buffer.checksum;
+				boost::system::error_code error;
+				size_t slen = socket.write_some(boost::asio::buffer(write_buff), error);
+				//size_t slen = socket.read_some(boost::asio::buffer(Cbuff_read), error);
+				if (error == boost::asio::error::eof)
+					return 0;//break; // Connection closed cleanly by peer.
+				else if (error)
+					throw boost::system::system_error(error); // Some other error.
+				//Buffer.NumBit[0] =  read_buff[5];
+				//Buffer.NumBit[1] =  read_buff[6];
+				//Buffer.NumBit[0] = Cbuff_read[5];
+				//Buffer.NumBit[1] = Cbuff_read[6];
+				//std::cout.write(buf.data(), len);
+				std::cout<<"bytes:"<<slen<<"\ttime:"<<std::endl;
+			   // printf("time:%d!\n",Buffer.value);
+				timer.expires_from_now(boost::posix_time::milliseconds(TIMEOUT));
+				timer.wait();
+            	/*Timer_Stamp Buffer;
+            	Bytes read_buff;
+                read_buff.resize(MAX_RCV_SIZE);
+                //boost::array<char, 128> buf;
+                //char Cbuff_read[1024];
                 boost::system::error_code error;
-
-                size_t len = socket.read_some(boost::asio::buffer(buf), error);
-
+                size_t slen = socket.read_some(boost::asio::buffer(read_buff), error);
+                //size_t slen = socket.read_some(boost::asio::buffer(Cbuff_read), error);
                 if (error == boost::asio::error::eof)
                     break; // Connection closed cleanly by peer.
                 else if (error)
                     throw boost::system::system_error(error); // Some other error.
+                Buffer.NumBit[0] =  read_buff[5];
+                Buffer.NumBit[1] =  read_buff[6];
+                //Buffer.NumBit[0] = Cbuff_read[5];
+                //Buffer.NumBit[1] = Cbuff_read[6];
+                //std::cout.write(buf.data(), len);
+                std::cout<<"bytes:"<<slen<<"\ttime:"<<Buffer.value<<std::endl;
+               // printf("time:%d!\n",Buffer.value);
+                timer.expires_from_now(boost::posix_time::milliseconds(TIMEOUT));
+                timer.wait();*/
 
-                std::cout.write(buf.data(), len);
-            }
         }
         catch (std::exception& e)
         {
